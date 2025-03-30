@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Share</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>File Sharing</h2>
+
+        <div id="authSection">
+            <input type="password" id="passwordInput" placeholder="Enter Password">
+            <button onclick="login()">Login</button>
+        </div>
+
+        <div id="fileSection" style="display: none;">
+            <form id="uploadForm">
+                <input type="file" id="fileInput">
+                <button type="submit">Upload</button>
+            </form>
+            <h3>Files:</h3>
+            <ul id="fileList"></ul>
+            <button id="logoutButton" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+
+</html>
