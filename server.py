@@ -20,10 +20,15 @@ def list_files():
 
 @app.route("/upload", methods=["POST"])
 def upload():
-    file = request.files["file"]
-    if file:
-        file.save(os.path.join(UPLOAD_FOLDER, file.filename))
-    return "File uploaded", 200
+    files = request.files.getlist("files")
+    if not files:
+        return "No files selected", 400
+
+    for file in files:
+        if file.filename:
+            file.save(os.path.join(UPLOAD_FOLDER, file.filename))
+
+    return "Files uploaded", 200
 
 @app.route("/download/<filename>")
 def download(filename):
