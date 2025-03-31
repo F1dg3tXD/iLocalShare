@@ -1,5 +1,6 @@
 from flask import Flask, request, send_from_directory, render_template, jsonify
 import os
+import socket
 
 app = Flask(__name__, static_folder="static", template_folder="static")
 
@@ -33,6 +34,25 @@ def upload():
 @app.route("/download/<filename>")
 def download(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
+
+# Function to get local IP address
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = "127.0.0.1"
+    finally:
+        s.close()
+    return ip
+
+@app.route("/server-info")
+def server_info():
+    return jsonify({
+        "ip": get_local_ip(),
+        "port": 5000  # Change this if you're running the server on a different port
+    })
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

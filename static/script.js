@@ -72,6 +72,63 @@ document.getElementById("uploadForm").addEventListener("submit", async function(
     fetchFiles();
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const themeToggle = document.getElementById("theme-toggle");
+    
+    // Enable dark mode by default
+    if (!localStorage.getItem("theme")) {
+        localStorage.setItem("theme", "dark");
+    }
+
+    // Apply saved theme
+    if (localStorage.getItem("theme") === "light") {
+        document.body.classList.add("light-mode");
+        themeToggle.innerText = "🌙 Dark Mode";
+    } else {
+        document.body.classList.remove("light-mode");
+        themeToggle.innerText = "☀️ Light Mode";
+    }
+
+    themeToggle.addEventListener("click", function () {
+        document.body.classList.toggle("light-mode");
+        if (document.body.classList.contains("light-mode")) {
+            localStorage.setItem("theme", "light");
+            themeToggle.innerText = "🌙 Dark Mode";
+        } else {
+            localStorage.setItem("theme", "dark");
+            themeToggle.innerText = "☀️ Light Mode";
+        }
+    });
+});
+
+async function fetchServerInfo() {
+    try {
+        const response = await fetch("/server-info");
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        document.getElementById("localhost-info").innerText = `http://127.0.0.1:${data.port}`;
+        document.getElementById("ip-info").innerText = `http://${data.ip}:${data.port}`;
+
+        // Generate QR code
+        document.getElementById("qrcode").innerHTML = ""; // Clear previous QR code
+        new QRCode(document.getElementById("qrcode"), {
+            text: `http://${data.ip}:${data.port}`,
+            width: 128,
+            height: 128
+        });
+
+    } catch (error) {
+        console.error("Error fetching server info:", error);
+    }
+}
+
+fetchServerInfo();
+
 function logout() {
     fetch("/logout").then(() => {
         location.reload();
