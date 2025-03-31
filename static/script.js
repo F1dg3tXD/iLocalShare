@@ -51,14 +51,24 @@ document.getElementById("uploadForm").addEventListener("submit", async function(
     event.preventDefault();
 
     let fileInput = document.getElementById("fileInput");
+    let files = fileInput.files;
+    
+    if (files.length === 0) {
+        alert("No files selected");
+        return;
+    }
+
     let formData = new FormData();
-    formData.append("file", fileInput.files[0]);
+    for (let i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);
+    }
 
     await fetch("/upload", {
         method: "POST",
         body: formData
     });
 
+    fileInput.value = "";
     fetchFiles();
 });
 
