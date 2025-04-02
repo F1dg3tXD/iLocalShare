@@ -4,7 +4,7 @@ import socket
 
 app = Flask(__name__, static_folder="static", template_folder="static")
 app.secret_key = os.urandom(24)
-UPLOAD_FOLDER = "shared"
+UPLOAD_FOLDER = os.path.join(os.path.expanduser("~"), "Documents", "iFileShareUploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 PASSWORD_FILE = "password.txt"

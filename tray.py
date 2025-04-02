@@ -77,6 +77,13 @@ start_server("open")
 def open_web_ui():
     webbrowser.open("http://127.0.0.1:5000")
 
+def open_uploads_folder():
+    folder_path = os.path.join(os.path.expanduser("~"), "Documents", "iFileShareUploads")
+    if os.path.exists(folder_path):
+        subprocess.run(["explorer", folder_path], shell=True)
+    else:
+        print("Upload folder does not exist.")
+
 def exit_app(icon, item):
     stop_server()  # Ensure the server stops when exiting
     icon.stop()
@@ -88,6 +95,7 @@ menu = (
     item("Open Web UI", open_web_ui),
     item("Restart in Open", lambda icon, item: start_server("open")),
     item("Restart in Private", lambda icon, item: start_server("private")),
+    pystray.MenuItem("Open Uploads Folder", open_uploads_folder),
     item("Exit", exit_app)
 )
 
