@@ -4,6 +4,8 @@ A simple, no-frills local file-sharing server. Works between Windows and iOS (or
 
 <b>Fuck you Tim.</b> 
 
+<img src="icon.png" alt="iFileShare" width="300"/>
+
 ## Features  
 
 ✅ Drag-and-drop file uploads  
@@ -40,14 +42,21 @@ python secure-server.py
 ```
 This will prompt you to set a password, required for file access.
 
-# Accessing the Web App
+## Accessing the Web App
 Open a browser on your phone or computer.
 
 Go to <http://your-pc-ip:5000>.
 
 Start sharing files.
 
+## Building Executable
+ * Make sure `build.spec` is configured to your liking.
+ * Run `pyinstaller build.spec`
+
+## TODO
+* Secure server password handling needs remaking for tray application. (not working)
+
+
 # Why This Exists
 Because sometimes, you just need to move a file from point A to point B without Apple, Microsoft, or some over-engineered cloud service getting in the way.
 
-<b>Built in record time with zero overthinking.</b> 🚀

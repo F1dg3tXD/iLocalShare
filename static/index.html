@@ -13,9 +13,12 @@
     <div class="container">
         <h2>File Sharing</h2>
 
-        <div id="authSection">
-            <input type="password" id="passwordInput" placeholder="Enter Password">
-            <button onclick="login()">Login</button>
+        <div id="authSection" style="display: none;">
+            <form id="loginForm">
+                <label for="passwordInput">Password:</label>
+                <input type="password" id="passwordInput" required>
+                <button type="submit">Login</button>
+            </form>
         </div>
 
         <div id="fileSection" style="display: none;">
