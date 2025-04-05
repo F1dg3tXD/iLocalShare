@@ -54,7 +54,8 @@ Start sharing files.
  * Run `pyinstaller build.spec`
 
 ### Example build.spec file
-```# PyInstaller build script for iFileShare
+```
+# PyInstaller build script for iFileShare
 
 from PyInstaller.utils.hooks import collect_data_files
 
@@ -102,7 +103,8 @@ coll = COLLECT(
     strip=False,
     upx=True,
     name='iFileShare'
-)```
+)
+```
 
 
 
