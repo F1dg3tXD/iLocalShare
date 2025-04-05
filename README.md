@@ -53,6 +53,59 @@ Start sharing files.
  * Make sure `build.spec` is configured to your liking.
  * Run `pyinstaller build.spec`
 
+### Example build.spec file
+```# PyInstaller build script for iFileShare
+
+from PyInstaller.utils.hooks import collect_data_files
+
+# Collect static assets (CSS, JS, etc.)
+static_files = collect_data_files('static', includes=['*.css', '*.js'])
+
+a = Analysis(
+    ['tray.py'],  # Entry point
+    pathex=['.'],
+    binaries=[],
+    datas=static_files + [
+        ('icon.png', '.'),  # Include the icon
+        ('server.py', '.'),  # Include server scripts
+    ],
+    hiddenimports=[],
+    hookspath=[],
+    runtime_hooks=[],
+    excludes=[],
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=None,
+    noarchive=False
+)
+
+pyz = PYZ(a.pure, a.zipped_data, cipher=None)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    exclude_binaries=True,
+    name='iFileShare',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=False,  # Hide console window
+    icon='icon.ico'  # Custom icon
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    name='iFileShare'
+)```
+
+
+
 ## TODO
 * Secure server password handling needs remaking for tray application. (not working)
 
