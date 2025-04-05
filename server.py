@@ -51,8 +51,8 @@ def get_local_ip():
 def server_info():
     return jsonify({
         "ip": get_local_ip(),
-        "port": 5000  # Change this if you're running the server on a different port
+        "port": 5500  # Change this if you're running the server on a different port
     })
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5500, debug=True)

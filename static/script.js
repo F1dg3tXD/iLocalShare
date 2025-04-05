@@ -1,18 +1,16 @@
+// Redirect to login.html if not authenticated
 async function checkAuth() {
     try {
         const response = await fetch("/requires-auth");
         const data = await response.json();
 
-        if (data.requiresAuth) {
-            // Show login form if authentication is required
-            document.getElementById("authSection").style.display = "block";
-            document.getElementById("fileSection").style.display = "none";
-        } else if (data.secureServerRunning) {
-            // Prompt for password if secure-server is running
-            document.getElementById("authSection").style.display = "block";
-            document.getElementById("fileSection").style.display = "none";
+        if (data.requiresAuth || data.secureServerRunning) {
+            // If we're not already on the login page, redirect
+            if (!window.location.pathname.includes("login.html")) {
+                window.location.href = "/static/login.html";
+            }
         } else {
-            // If no authentication is required, show file section
+            // Show the main file section
             document.getElementById("authSection").style.display = "none";
             document.getElementById("fileSection").style.display = "block";
             fetchFiles();
@@ -22,19 +20,26 @@ async function checkAuth() {
     }
 }
 
+// Only used if you're still keeping a login form on this page (optional)
 async function login() {
     const password = document.getElementById("passwordInput").value;
 
-    const response = await fetch("/", {
+    const response = await fetch("/static/login", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `password=${encodeURIComponent(password)}`
     });
 
     if (response.ok) {
-        location.reload(); // Reload the page to apply authentication
+        const data = await response.json();
+        if (data.success) {
+            window.location.href = "/static/index.html";
+        } else {
+            alert("Wrong password!");
+            document.getElementById("passwordInput").value = "";
+        }
     } else {
-        alert("Wrong password!");
+        alert("Login failed!");
     }
 }
 
@@ -43,9 +48,7 @@ async function fetchFiles() {
         const response = await fetch("/files");
 
         if (response.status === 403) {
-            // If unauthorized, show login form again
-            document.getElementById("authSection").style.display = "block";
-            document.getElementById("fileSection").style.display = "none";
+            window.location.href = "/static/login.html";
             return;
         }
 
@@ -91,12 +94,10 @@ document.getElementById("uploadForm").addEventListener("submit", async function(
 document.addEventListener("DOMContentLoaded", function () {
     const themeToggle = document.getElementById("theme-toggle");
 
-    // Enable dark mode by default
     if (!localStorage.getItem("theme")) {
         localStorage.setItem("theme", "dark");
     }
 
-    // Apply saved theme
     if (localStorage.getItem("theme") === "light") {
         document.body.classList.add("light-mode");
         themeToggle.innerText = "🌙 Dark Mode";
@@ -115,6 +116,15 @@ document.addEventListener("DOMContentLoaded", function () {
             themeToggle.innerText = "☀️ Light Mode";
         }
     });
+
+    // Optional: Handle login form if it exists on this page
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            login();
+        });
+    }
 });
 
 async function fetchServerInfo() {
@@ -130,8 +140,7 @@ async function fetchServerInfo() {
         document.getElementById("localhost-info").innerText = `http://127.0.0.1:${data.port}`;
         document.getElementById("ip-info").innerText = `http://${data.ip}:${data.port}`;
 
-        // Generate QR code
-        document.getElementById("qrcode").innerHTML = ""; // Clear previous QR code
+        document.getElementById("qrcode").innerHTML = "";
         new QRCode(document.getElementById("qrcode"), {
             text: `http://${data.ip}:${data.port}`,
             width: 128,
@@ -144,12 +153,10 @@ async function fetchServerInfo() {
 }
 
 fetchServerInfo();
+checkAuth();
 
 function logout() {
     fetch("/logout").then(() => {
-        location.reload();
+        window.location.href = "/static/login.html";
     });
 }
-
-// Check authentication status on page load
-checkAuth();

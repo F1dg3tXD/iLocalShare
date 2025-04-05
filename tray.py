@@ -75,7 +75,7 @@ def start_server(mode):
 start_server("open")
 
 def open_web_ui():
-    webbrowser.open("http://127.0.0.1:5000")
+    webbrowser.open("http://127.0.0.1:5500")
 
 def open_uploads_folder():
     folder_path = os.path.join(os.path.expanduser("~"), "Documents", "iFileShareUploads")
@@ -94,7 +94,7 @@ icon_image = Image.open("icon.png")
 menu = (
     item("Open Web UI", open_web_ui),
     item("Restart in Open", lambda icon, item: start_server("open")),
-    item("Restart in Private", lambda icon, item: start_server("private")),
+    # item("Restart in Private", lambda icon, item: start_server("private")), # Private mode deprecated
     pystray.MenuItem("Open Uploads Folder", open_uploads_folder),
     item("Exit", exit_app)
 )
