@@ -40,7 +40,7 @@ def restart_open():
 #     start_private()
 
 def open_uploads_folder():
-    folder_path = os.path.join(os.path.expanduser("~"), "Documents", "iFileShareUploads")
+    folder_path = os.path.join(os.path.expanduser("~"), "Documents", "iLocalShareUploads")
     if os.path.exists(folder_path):
         subprocess.run(["open", folder_path])
     else:
@@ -68,7 +68,7 @@ def setup_tray():
         Item("Quit", exit_app)
     )
 
-    icon = Icon("iFileShare", image, "iFileShare", menu)
+    icon = Icon("iLocalShare", image, "iLocalShare", menu)
     icon.run()
 
 if __name__ == "__main__":

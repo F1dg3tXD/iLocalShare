@@ -8,7 +8,7 @@ from pystray import MenuItem as item, Icon
 from PIL import Image
 import webbrowser
 
-LOCK_FILE = "ifileshare.lock"
+LOCK_FILE = "ilocalshare.lock"
 server_process = None  # Track running server
 
 def is_another_instance_running():
@@ -26,7 +26,7 @@ def cleanup():
 atexit.register(cleanup)
 
 if is_another_instance_running():
-    print("iFileShare is already running.")
+    print("iLocalShare is already running.")
     sys.exit(0)
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -78,7 +78,7 @@ def open_web_ui():
     webbrowser.open("http://127.0.0.1:5500")
 
 def open_uploads_folder():
-    folder_path = os.path.join(os.path.expanduser("~"), "Documents", "iFileShareUploads")
+    folder_path = os.path.join(os.path.expanduser("~"), "Documents", "iLocalShareUploads")
     if os.path.exists(folder_path):
         subprocess.run(["explorer", folder_path], shell=True)
     else:
@@ -99,5 +99,5 @@ menu = (
     item("Exit", exit_app)
 )
 
-tray_icon = Icon("iFileShare", icon_image, menu=menu)
+tray_icon = Icon("iLocalShare", icon_image, menu=menu)
 tray_icon.run()
