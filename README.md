@@ -37,15 +37,14 @@ This starts a local server that anyone can access.
 ### Option 2: Secure Server (With Password)
 For when you realize that trusting everyone is a bad idea.
 
-```
-python secure-server.py
-```
-This will prompt you to set a password, required for file access.
+Passwords are handled in javascript with the web UI in the `/static` directory.
+
+Set up your own password system.
 
 ## Accessing the Web App
 Open a browser on your phone or computer.
 
-Go to <http://your-pc-ip:5000>.
+Go to <http://your-pc-ip:5500>.
 
 Start sharing files.
 
