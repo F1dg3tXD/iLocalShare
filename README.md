@@ -54,7 +54,7 @@ Start sharing files.
 
 ### Example build.spec file
 ```
-# PyInstaller build script for iFileShare
+# PyInstaller build script for iLocalShare
 
 from PyInstaller.utils.hooks import collect_data_files
 
@@ -69,7 +69,7 @@ a = Analysis(
         ('icon.png', '.'),  # Include the icon
         ('server.py', '.'),  # Include server scripts
     ],
-    hiddenimports=[],
+    hiddenimports=['psutil', 'pystray'],  # <-- These are required for building exe.
     hookspath=[],
     runtime_hooks=[],
     excludes=[],
@@ -85,7 +85,7 @@ exe = EXE(
     pyz,
     a.scripts,
     exclude_binaries=True,
-    name='iFileShare',
+    name='iLocalShare',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -101,7 +101,7 @@ coll = COLLECT(
     a.datas,
     strip=False,
     upx=True,
-    name='iFileShare'
+    name='iLocalShare'
 )
 ```
 
