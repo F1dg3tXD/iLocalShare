@@ -7,6 +7,8 @@ import pystray
 from pystray import MenuItem as item, Icon
 from PIL import Image
 import webbrowser
+import server
+import threading
 
 LOCK_FILE = "ilocalshare.lock"
 server_process = None  # Track running server
@@ -49,27 +51,38 @@ def stop_server():
     server_process = None
 
 def start_server(mode):
-    """Restart the server in Open or Private mode."""
+    """Start the server in a thread if bundled, else as subprocess."""
     global server_process
+
     stop_server()  # Kill any running server first
 
-    server_script = "server.py" if mode == "open" else "secure-server.py"
-    server_path = os.path.join(SCRIPT_DIR, server_script)
+    if getattr(sys, 'frozen', False):
+        # Running as bundled EXE: start server in a thread
+        def run_server():
+            server.app.run(host="0.0.0.0", port=5500, debug=False)
+        server_thread = threading.Thread(target=run_server, daemon=True)
+        server_thread.start()
+        server_process = None  # No subprocess
+        print("Started server in thread (bundled mode)")
+    else:
+        # Running from source: use subprocess as before
+        server_script = "server.py" if mode == "open" else "secure-server.py"
+        server_path = os.path.join(SCRIPT_DIR, server_script)
 
-    if not os.path.exists(server_path):
-        print(f"Error: {server_script} not found in {SCRIPT_DIR}")
-        return
+        if not os.path.exists(server_path):
+            print(f"Error: {server_script} not found in {SCRIPT_DIR}")
+            return
 
-    try:
-        server_process = subprocess.Popen(
-            [PYTHON_EXEC, server_path],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
-        )
-        print(f"Started {server_script}")
-    except Exception as e:
-        print(f"Failed to start {server_script}: {e}")
+        try:
+            server_process = subprocess.Popen(
+                [PYTHON_EXEC, server_path],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+            )
+            print(f"Started {server_script}")
+        except Exception as e:
+            print(f"Failed to start {server_script}: {e}")
 
 # Automatically start the server in Open mode when tray starts
 start_server("open")
@@ -89,7 +102,12 @@ def exit_app(icon, item):
     icon.stop()
     sys.exit(0)
 
-icon_image = Image.open("icon.png")
+def resource_path(filename):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, filename)
+    return os.path.join(os.path.abspath("."), filename)
+
+icon_image = Image.open(resource_path("icon.png"))
 
 menu = (
     item("Open Web UI", open_web_ui),
@@ -101,3 +119,4 @@ menu = (
 
 tray_icon = Icon("iLocalShare", icon_image, menu=menu)
 tray_icon.run()
+

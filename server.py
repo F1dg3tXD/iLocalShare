@@ -2,7 +2,7 @@ from flask import Flask, request, send_from_directory, render_template, jsonify
 import os
 import socket
 
-app = Flask(__name__, static_folder="static", template_folder="static")
+app = Flask(__name__, static_folder="static", template_folder="templates")
 
 UPLOAD_FOLDER = os.path.join(os.path.expanduser("~"), "Documents", "iLocalShareUploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

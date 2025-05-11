@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iLocalShare</title>
+    <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>File Sharing</h2>
+
+        <div id="authSection" style="display: none;">
+            <form id="loginForm">
+                <label for="passwordInput">Password:</label>
+                <input type="password" id="passwordInput" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <div id="fileSection" style="display: none;">
+            <form id="uploadForm">
+                <input type="file" id="fileInput" multiple>
+                <button type="submit">Upload</button>
+            </form>
+            <h3>Files:</h3>
+            <ul id="fileList"></ul>
+            <button id="logoutButton" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>About Server</h2>
+            <div class="server-info-container">
+                <div class="qr-section">
+                    <h3>Scan to Connect</h3>
+                    <div id="qrcode"></div>
+                </div>
+
+                <div class="server-info">
+                    <h3>Server Info</h3>
+                    <p><strong>Localhost:</strong> <span id="localhost-info"></span></p>
+                    <p><strong>IP Address:</strong> <span id="ip-info"></span></p>
+                </div>
+            </div>
+    </div>
+    
+    <button id="theme-toggle">☀️ Light Mode</button>
+
+    <!-- About the Developer Section -->
+    <div class="about-developer">
+        <h3>About the Developer</h3>
+        <p>Initially made by <strong>F1dg3t</strong> in literally 20 minutes.</p>
+        <h3>Make a <a href="https://github.com/F1dg3tXD/iLocalShare/pulls">Pull Request</a>.</h3>
+        <h3>Report an <a href="https://github.com/F1dg3tXD/iLocalShare/issues">Issue</a>.</h3>
+    </div>
+    
+    <!-- Floating Social Buttons -->
+    <div id="social-buttons" class="social-container">
+        <!-- Social links will be populated by JS -->
+    </div>
+    <script type="module" src="/static/config.js"></script>
+    <script type="module" src="/static/main.js"></script>
+
+    <script defer src="/static/script.js"></script>
+</body>
+
+</html>
